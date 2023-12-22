@@ -1,7 +1,8 @@
 import * as puppeteer from 'puppeteer';
+import { Page } from 'puppeteer';
 
 let browser;
-let page;
+let page: Page | undefined;
 
 export async function getBrowser() {
     if (!browser) {
@@ -15,14 +16,14 @@ export async function getBrowser() {
 }
 
 export async function getPage(urlLogin: string) {
-    if (!page) {
-        const browserInstance = await getBrowser();
+    if (!(page instanceof Page)) {
+        const browserInstance = await puppeteer.launch();
         page = await browserInstance.newPage();
         await page.setViewport({ width: 1500, height: 1000 });
         await page.goto(urlLogin);
         await page.waitForTimeout(1000);
     }
-    return page
+    return page;
 }
 
 export async function reloadPage() {

@@ -11,6 +11,7 @@ import { BadRequestException } from '@nestjs/common';
 import { waitParams } from 'src/utils/params';
 import { clearInputValue } from '../../utils/clearInputValue';
 import { typeIntoInput } from '../../utils/type_into_input';
+import * as puppeteer from 'puppeteer';
 
 let initialAmountGeneral
 
@@ -83,7 +84,8 @@ export class MovementService {
         const btnXpath = '//button[contains(@class, "el-button") and .//span[text()="Set Score"]]';
         await page.waitForSelector(".el-button", waitParams);
         const btnSetScore = await page.$x(btnXpath);
-        await btnSetScore[0].click();
+        const buttonSetScore = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
+        await buttonSetScore.click();
         await page.waitForTimeout(500);
 
         //** input Points and save**//
@@ -98,8 +100,9 @@ export class MovementService {
             btnElements = await page.$x(xpathSelector)
         }
 
-        await btnElements[0].click();
-        
+        const buttonElement = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
+        await buttonElement[0].click();
+
         await reloadPage()
 
         //** Check if the operation was performed correctly */
