@@ -7,8 +7,8 @@ let page: Page | undefined;
 export async function getBrowser() {
     if (!browser) {
         browser = await puppeteer.launch({
-            headless: true,
-            executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser',
+            headless: false,
+            //executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser',
             args: ['--start-maximized']
         });
     }
@@ -16,6 +16,7 @@ export async function getBrowser() {
 }
 
 export async function getPage(urlLogin: string) {
+    console.log(page)
     if (!(page instanceof Page)) {
         const browserInstance = await puppeteer.launch();
         page = await browserInstance.newPage();

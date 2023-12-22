@@ -99,7 +99,7 @@ export class MovementService {
         }
 
         await btnElements[0].click();
-        
+
         await reloadPage()
 
         //** Check if the operation was performed correctly */

@@ -1,4 +1,3 @@
-import { waitParams } from "src/utils/params";
 import { reloadPage } from "../browser/browserService";
 
 export const serchTableInformationOfUser = async (value, page) => {
@@ -24,6 +23,8 @@ export const serchTableInformationOfUser = async (value, page) => {
             if (btnElements.length) {
                 const isVisible = await btnElements[0].isIntersectingViewport();
                 if (isVisible) {
+                    console.log("btnElements", btnElements[0])
+
                     await btnElements[0].click();
                 }
             }

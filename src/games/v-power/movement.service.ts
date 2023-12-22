@@ -11,7 +11,6 @@ import { BadRequestException } from '@nestjs/common';
 import { waitParams } from 'src/utils/params';
 import { clearInputValue } from '../../utils/clearInputValue';
 import { typeIntoInput } from '../../utils/type_into_input';
-import * as puppeteer from 'puppeteer';
 
 let initialAmountGeneral
 
@@ -84,7 +83,7 @@ export class MovementService {
         const btnXpath = '//button[contains(@class, "el-button") and .//span[text()="Set Score"]]';
         await page.waitForSelector(".el-button", waitParams);
         const btnSetScore = await page.$x(btnXpath);
-        const buttonSetScore = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
+        const buttonSetScore = btnSetScore[0] as any;
         await buttonSetScore.click();
         await page.waitForTimeout(500);
 
@@ -99,15 +98,16 @@ export class MovementService {
             const xpathSelector = "//button[.//span[contains(text(), 'OK')]]";
             btnElements = await page.$x(xpathSelector)
         }
-
-        const buttonElement = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
-        await buttonElement[0].click();
+        const buttonElement = btnElements[0] as any;
+        await buttonElement.click();
 
         await reloadPage()
+        console.log("btnElements222")
 
         //** Check if the operation was performed correctly */
         const NewDataTablePlayer = await serchTableInformationOfUser(mobileId, page)
         const finalAmount = await getScore(NewDataTablePlayer)
+        console.log("btnElements223")
 
         let status = false
         if (body.type === EtypeTask.GAME_POINTS) {
