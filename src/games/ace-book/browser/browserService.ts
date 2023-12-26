@@ -7,7 +7,7 @@ let page: Page | undefined;
 export async function getBrowser() {
     if (!browser) {
         browser = await puppeteer.launch({
-            headless: true,
+            headless: "new",
             executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser',
             args: ['--start-maximized']
         });

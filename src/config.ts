@@ -8,7 +8,6 @@ export const URL_SBS_ULTRA_PANDA = process.env.URL_SBS_ULTRA_PANDA;
 export const URL_SBS_V_POWER = process.env.URL_SBS_V_POWER;
 export const URL_SBS_X_GAMES = process.env.URL_SBS_X_GAMES;
 
-
 //*! DLQ
 export const URL_SBS_DLQ_CREATE_ACCOUNT = process.env.URL_SBS_DLQ_CREATE_ACCOUNT;
 export const SBS_NAME_DLQ_CREATE_ACCOUNT = process.env.SBS_NAME_DLQ_CREATE_ACCOUNT;

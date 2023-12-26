@@ -20,6 +20,11 @@ export class MovementService {
     async movement(body: ReqGroupGameDTO, data: IGameInfoGroup2, attempt: number) {
         // Obtain the page and its current URL
         const { mobileId, amount } = body.data as IMovements;
+
+        console.log("Type Operation: ", body.type)
+        console.log("amount: ", amount)
+        console.log("mobileId: ", mobileId)
+
         const requestAmount = (body.type === EtypeTask.GAME_POINTS) ? amount : amount * -1
 
         const page = await getPage(data.urlLogin);
@@ -41,12 +46,11 @@ export class MovementService {
         //**Serch User */
         const dataTablePlayer = await serchTableInformationOfUser(mobileId, page)
         const initialAmount = await getScore(dataTablePlayer)
+        console.log("initialAmount: ", initialAmount)
 
         if (attempt !== 1 && initialAmountGeneral) {
             if (body.type === EtypeTask.GAME_POINTS) {
                 if (parseInt(initialAmount) === parseInt(initialAmountGeneral) + amount) {
-                    console.log("mobileId: ", mobileId)
-                    console.log("initialAmount: ", initialAmountGeneral)
                     console.log("finalAmount: ", initialAmount)
                     initialAmountGeneral = null
                     return {
@@ -58,8 +62,6 @@ export class MovementService {
                 }
             } else {
                 if (parseInt(initialAmount) === parseInt(initialAmountGeneral) - amount) {
-                    console.log("mobileId: ", mobileId)
-                    console.log("initialAmount: ", initialAmountGeneral)
                     console.log("finalAmount: ", initialAmount)
 
                     initialAmountGeneral = null
@@ -102,12 +104,10 @@ export class MovementService {
         await buttonElement.click();
 
         await reloadPage()
-        console.log("btnElements222")
 
         //** Check if the operation was performed correctly */
         const NewDataTablePlayer = await serchTableInformationOfUser(mobileId, page)
         const finalAmount = await getScore(NewDataTablePlayer)
-        console.log("btnElements223")
 
         let status = false
         if (body.type === EtypeTask.GAME_POINTS) {
@@ -123,9 +123,7 @@ export class MovementService {
         if (!status) {
             throw new BadRequestException("Error Task")
         }
-
-        console.log("mobileId: ", mobileId)
-        console.log("initialAmount: ", initialAmount)
+        
         console.log("finalAmount: ", finalAmount)
 
         initialAmountGeneral = null
@@ -138,3 +136,4 @@ export class MovementService {
     }
 
 }
+

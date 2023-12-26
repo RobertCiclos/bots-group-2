@@ -2,7 +2,7 @@ import { reloadPage } from "../browser/browserService";
 
 export const serchTableInformationOfUser = async (value, page) => {
 
-    let attempts: number[] = [1, 2];
+    let attempts: number[] = [1, 2, 3];
 
     for (let attempt of attempts) {
         console.log("Attempt Find Information:", attempt)
@@ -38,7 +38,7 @@ export const serchTableInformationOfUser = async (value, page) => {
                 return thirdTable
             }
 
-            if (attempt === 2) {
+            if (attempt === attempts.length - 1) {
                 throw new Error("User not found")
             }
         }

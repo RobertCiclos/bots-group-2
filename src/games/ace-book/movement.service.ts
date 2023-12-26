@@ -11,7 +11,6 @@ import { BadRequestException } from '@nestjs/common';
 import { waitParams } from 'src/utils/params';
 import { clearInputValue } from '../../utils/clearInputValue';
 import { typeIntoInput } from '../../utils/type_into_input';
-import * as puppeteer from 'puppeteer';
 
 let initialAmountGeneral
 
@@ -21,6 +20,11 @@ export class MovementService {
     async movement(body: ReqGroupGameDTO, data: IGameInfoGroup2, attempt: number) {
         // Obtain the page and its current URL
         const { mobileId, amount } = body.data as IMovements;
+
+        console.log("Type Operation: ", body.type)
+        console.log("amount: ", amount)
+        console.log("mobileId: ", mobileId)
+
         const requestAmount = (body.type === EtypeTask.GAME_POINTS) ? amount : amount * -1
 
         const page = await getPage(data.urlLogin);
@@ -42,12 +46,11 @@ export class MovementService {
         //**Serch User */
         const dataTablePlayer = await serchTableInformationOfUser(mobileId, page)
         const initialAmount = await getScore(dataTablePlayer)
+        console.log("initialAmount: ", initialAmount)
 
         if (attempt !== 1 && initialAmountGeneral) {
             if (body.type === EtypeTask.GAME_POINTS) {
                 if (parseInt(initialAmount) === parseInt(initialAmountGeneral) + amount) {
-                    console.log("mobileId: ", mobileId)
-                    console.log("initialAmount: ", initialAmountGeneral)
                     console.log("finalAmount: ", initialAmount)
                     initialAmountGeneral = null
                     return {
@@ -59,8 +62,6 @@ export class MovementService {
                 }
             } else {
                 if (parseInt(initialAmount) === parseInt(initialAmountGeneral) - amount) {
-                    console.log("mobileId: ", mobileId)
-                    console.log("initialAmount: ", initialAmountGeneral)
                     console.log("finalAmount: ", initialAmount)
 
                     initialAmountGeneral = null
@@ -84,7 +85,7 @@ export class MovementService {
         const btnXpath = '//button[contains(@class, "el-button") and .//span[text()="Set Score"]]';
         await page.waitForSelector(".el-button", waitParams);
         const btnSetScore = await page.$x(btnXpath);
-        const buttonSetScore = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
+        const buttonSetScore = btnSetScore[0] as any;
         await buttonSetScore.click();
         await page.waitForTimeout(500);
 
@@ -99,9 +100,8 @@ export class MovementService {
             const xpathSelector = "//button[.//span[contains(text(), 'OK')]]";
             btnElements = await page.$x(xpathSelector)
         }
-
-        const buttonElement = btnSetScore[0] as unknown as puppeteer.ElementHandle<Element>;
-        await buttonElement[0].click();
+        const buttonElement = btnElements[0] as any;
+        await buttonElement.click();
 
         await reloadPage()
 
@@ -123,9 +123,7 @@ export class MovementService {
         if (!status) {
             throw new BadRequestException("Error Task")
         }
-
-        console.log("mobileId: ", mobileId)
-        console.log("initialAmount: ", initialAmount)
+        
         console.log("finalAmount: ", finalAmount)
 
         initialAmountGeneral = null

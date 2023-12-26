@@ -62,7 +62,7 @@ export class AceBookService {
                 await this.serviceMovementRepository.sendApprovedMovement(body)
                 break
             } catch (error) {
-                console.log("❌ " + error + infoGame.name + "☘️");
+                console.log("❌ " + error + infoGame.name + " ☘️");
                 if (error?.message === "The user does not have the necessary points") {
                     await this.producersRepository.sendDLQMovements(body)
                     break
