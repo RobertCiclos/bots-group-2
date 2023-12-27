@@ -28,7 +28,7 @@ export class MovementService {
         const requestAmount = (body.type === EtypeTask.GAME_POINTS) ? amount : amount * -1
 
         const page = await getPage(data.urlLogin);
-
+        await reloadPage()
         // Login in case is necessary
         const currentUrl = await page.url();
 

@@ -28,6 +28,7 @@ export class MovementService {
         const requestAmount = (body.type === EtypeTask.GAME_POINTS) ? amount : amount * -1
 
         const page = await getPage(data.urlLogin);
+        await reloadPage()
 
         // Login in case is necessary
         const currentUrl = await page.url();
@@ -63,7 +64,6 @@ export class MovementService {
             } else {
                 if (parseInt(initialAmount) === parseInt(initialAmountGeneral) - amount) {
                     console.log("finalAmount: ", initialAmount)
-
                     initialAmountGeneral = null
                     return {
                         mobileId,
